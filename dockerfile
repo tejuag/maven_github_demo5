@@ -1,29 +1,19 @@
 
-# Stage 1: Build
+# Build stage
 FROM maven:3.9.9-eclipse-temurin-17 AS build
 
 WORKDIR /app
 
 COPY pom.xml .
 COPY src ./src
-COPY testng.xml .
-COPY webpage ./webpage
 
-RUN mvn dependency:go-offline -B
+RUN mvn clean package
 
-RUN mvn test-compile
-
-# Stage 2: Runtime
-FROM maven:3.9.9-eclipse-temurin-17
+# Run stage
+FROM eclipse-temurin:17-jre
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    chromium \
-    && rm -rf /var/lib/apt/lists/*
+COPY --from=build /app/target/*.jar app.jar
 
-COPY --from=build /app /app
-
-ENV CHROME_BIN=/usr/bin/chromium
-
-CMD ["mvn", "test"]
+CMD ["java", "-cp", "app.jar", "com.example.App"]
