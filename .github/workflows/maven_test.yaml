@@ -34,4 +34,8 @@ jobs:
         with:
           context: .
           push: true
+<<<<<<< HEAD
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/maven-github-demo5:latest
+=======
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/maven-github-demo5:latest
+>>>>>>> 84edd23ebaf37d472c5e75e59e336b1f03030906
